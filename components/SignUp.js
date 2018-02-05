@@ -12,11 +12,19 @@ import { Camera, Permissions } from "expo";
 import { Icon, Button, FormInput } from "react-native-elements";
 import SignUpCamera from "./SignUpCamera";
 
+const Kairos = require("kairos-api");
+const client = new Kairos("a85dfd9e", "f2a5cf66a6e3c657d7f9cfbb4470ada1");
+import random from "random-key";
+
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "hello world",
+      email: '',
+      password: '',
+      first: '',
+      last: '',
+      cardNum: '',
       showCamera: false,
       hasCameraPermission: null,
       type: Camera.Constants.Type.front,
@@ -37,45 +45,61 @@ export default class SignUp extends Component {
 
   snap() {}
 
-  handleSignUp() {
-    console.log("signup btn working");
-    //do a post
+  sendToKairos = () => {
+    let subject_id = random.generate()
+    let params = {
+      image: this.state.images[0],
+      subject_id,
+      gallery_name: "go-gallery-5",
+      selector: "SETPOSE"
+    };
+    client
+      .enroll(params)
+      .then(res => {
+        console.log(res);
+        params.image = this.state.images[1];
+        return client.enroll(params);
+      })
+      .then(res => {
+        console.log(res);
+        params.image = this.state.images[2];
+        return client.enroll(params);
+      })
+      .then(res => {
+        console.log('last image', res)
+        //post to our db with subj id
+        axios.post()
+      })
+      .catch(err => console.log(err));
+
+    //after sending all 3 images for that person, create subjectId on new user for signup
+
+    //user post
   }
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         {/* password, first, last, cardNum */}
-        {/* <TextInput
-          onChangeText={text => this.setState({ email: text })}
-          value={this.state.email}
-          style={styles.field}
-        />
-        <TextInput
-          onChangeText={text => this.setState({ email: text })}
-          value={this.state.email}
-          style={styles.field}
-        />
-        <TextInput
-          onChangeText={text => this.setState({ email: text })}
-          value={this.state.email}
-          style={styles.field}
-        />
-        <TextInput
-          onChangeText={text => this.setState({ email: text })}
-          value={this.state.email}
-          style={styles.field}
-        /> */}
-        <TextInput
-          onChangeText={text => this.setState({ email: text })}
-          value={this.state.email}
-          style={styles.field}
-        />
         <FormInput
           onChangeText={text => this.setState({ email: text })}
           value={this.state.email}
           containerStyle={styles.field}
         />
-        <FormInput onChangeText={text => this.setState({ email: text })} />
+        <FormInput
+          onChangeText={text => this.setState({ first: text })}
+          value={this.state.first}
+          containerStyle={styles.field}
+        />
+        <FormInput
+          onChangeText={text => this.setState({ last: text })}
+          value={this.state.last}
+          containerStyle={styles.field}
+        />
+        <FormInput
+          onChangeText={text => this.setState({ cardNum: text })}
+          value={this.state.cardNum}
+          containerStyle={styles.field}
+        />
         <View style={styles.footer}>
           <View style={styles.photoContainer}>
             {this.state.photos.map(img => (
@@ -113,8 +137,10 @@ export default class SignUp extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    width: '80%'
   },
   inputs: {
     flex: 1,
@@ -126,10 +152,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   field: {
-    width: "80%",
+    // width: "80%",
     marginTop: 50,
     height: 40,
-    color: "red",
     backgroundColor: "red"
   },
   photoContainer: {
