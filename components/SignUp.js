@@ -12,9 +12,10 @@ import { Camera, Permissions } from "expo";
 import { Icon, Button, FormInput } from "react-native-elements";
 import SignUpCamera from "./SignUpCamera";
 
-const Kairos = require("kairos-api");
-const client = new Kairos("a85dfd9e", "f2a5cf66a6e3c657d7f9cfbb4470ada1");
-import random from "random-key";
+// import Kairos from "kairos-api"
+// const client = new Kairos("a85dfd9e", "f2a5cf66a6e3c657d7f9cfbb4470ada1")
+// import random from "random-key";
+import uuid from 'react-native-uuid'
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -45,37 +46,37 @@ export default class SignUp extends Component {
 
   snap() {}
 
-  sendToKairos = () => {
-    let subject_id = random.generate()
-    let params = {
-      image: this.state.images[0],
-      subject_id,
-      gallery_name: "go-gallery-5",
-      selector: "SETPOSE"
-    };
-    client
-      .enroll(params)
-      .then(res => {
-        console.log(res);
-        params.image = this.state.images[1];
-        return client.enroll(params);
-      })
-      .then(res => {
-        console.log(res);
-        params.image = this.state.images[2];
-        return client.enroll(params);
-      })
-      .then(res => {
-        console.log('last image', res)
-        //post to our db with subj id
-        axios.post()
-      })
-      .catch(err => console.log(err));
+//   sendToKairos = () => {
+//     let subject_id = random.generate()
+//     let params = {
+//       image: this.state.images[0],
+//       subject_id,
+//       gallery_name: "go-gallery-5",
+//       selector: "SETPOSE"
+//     };
+//     client
+//       .enroll(params)
+//       .then(res => {
+//         console.log(res);
+//         params.image = this.state.images[1];
+//         return client.enroll(params);
+//       })
+//       .then(res => {
+//         console.log(res);
+//         params.image = this.state.images[2];
+//         return client.enroll(params);
+//       })
+//       .then(res => {
+//         console.log('last image', res)
+//         //post to our db with subj id
+//         axios.post()
+//       })
+//       .catch(err => console.log(err));
 
-    //after sending all 3 images for that person, create subjectId on new user for signup
+//     //after sending all 3 images for that person, create subjectId on new user for signup
 
-    //user post
-  }
+//     //user post
+//   }
   render() {
     return (
       <View>
