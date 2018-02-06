@@ -6,7 +6,8 @@ import {
   TextInput,
   KeyboardAvoidingView,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  Modal
 } from 'react-native'
 import { StackNavigator } from 'react-navigation'
 import { login, ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
@@ -49,6 +50,9 @@ export default class Login extends React.Component {
 
           <TouchableOpacity style={styles.btn} onPress={this.loginUser}>
             <Text>Log in</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={this.loginUser}>
+            <Text>signup</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
