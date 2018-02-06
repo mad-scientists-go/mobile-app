@@ -9,8 +9,13 @@ import {
   AsyncStorage
 } from 'react-native'
 import { StackNavigator } from 'react-navigation'
+import { login, ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
 
 export default class Login extends React.Component {
+
+  static navigationOptions = {
+    header: null
+  }
 
   constructor(props){
     super(props)
@@ -18,19 +23,19 @@ export default class Login extends React.Component {
       username: '',
       password: ''
     }
-    this.login = this.login.bind(this)
+    this.loginUser = this.loginUser.bind(this)
   }
 
-  componentDidMount() {
-    this._loadInitialState().done()
-  }
+  // componentDidMount() {
+  //   this._loadInitialState().done()
+  // }
 
-  _loadInitialState = async () => {
-    let value = await AsyncStorage.getItem('user')
-    if (value !== null) {
-      this.props.navigation.navigate('Tabs')
-    }
-  }
+  // _loadInitialState = async () => {
+  //   let value = await AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
+  //   if (value !== null) {
+  //     this.props.navigation.navigate('Tabs')
+  //   }
+  // }
 
   render() {
     return (
@@ -42,7 +47,7 @@ export default class Login extends React.Component {
 
           <TextInput style={styles.textInput} placeholder='Password' onChangeText={ (password) => this.setState({password}) } underlineColorAndroid='transparent' secureTextEntry={true} />
 
-          <TouchableOpacity style={styles.btn} onPress={this.login}>
+          <TouchableOpacity style={styles.btn} onPress={this.loginUser}>
             <Text>Log in</Text>
           </TouchableOpacity>
         </View>
@@ -51,7 +56,7 @@ export default class Login extends React.Component {
   }
 
 
-login = () => {
+loginUser = () => {
   //this.props.navigation.navigate('Tabs')
   fetch('http://localhost:8080/auth/login-mobile', {
     method: 'POST',
@@ -61,22 +66,32 @@ login = () => {
     },
     body: JSON.stringify({
       email: this.state.username,
+      password: this.state.password
     })
   }).then(result => result.json())
     .then((res) => {
       if (res.email) {
         alert(`Hello ${res.first} ${res.last}`)
-        this.props.navigation.navigate('Tabs')
+         login(res)
+         .then(response => this._navigateTo('Tabs'))
+         .catch(err => console.log(err))
+
         // AsyncStorage.setItem('user', res.user)
-        // this.props.navigation.navigate('Order History')
+
       }
       else {
-        console.log(res, 'resssss')
         alert('User not found')
       }
     })
     .done()
 
+    _navigateTo = (routeName) => {
+      const actionToDispatch = NavigationActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName })]
+      })
+      this.props.navigation.dispatch(actionToDispatch)
+    }
 
 }
 }

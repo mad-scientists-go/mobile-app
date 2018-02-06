@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, ScrollView, View, TouchableOpacity } from 'react-native';
 import { fetchOrders  } from '../utils/api';
+import { dateReformat } from '../utils/helpers';
 import { NavigationActions } from 'react-navigation';
 import SingleOrder from './SingleOrder';
 import { white } from '../utils/colors';
@@ -17,8 +18,10 @@ export default class OrderList extends Component {
   componentDidMount() {
     fetchOrders()
       .then((results) => {
+          results.forEach(order => order["createdAt"] = dateReformat(order["createdAt"]))
         this.setState(() => ({orders: results}))
       })
+      .catch(err => console.log(err))
   }
 
   goToOrder = (name) => {
