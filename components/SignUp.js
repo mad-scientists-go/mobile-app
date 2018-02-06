@@ -15,7 +15,7 @@ import SignUpCamera from "./SignUpCamera";
 // import Kairos from "kairos-api"
 // const client = new Kairos("a85dfd9e", "f2a5cf66a6e3c657d7f9cfbb4470ada1")
 // import random from "random-key";
-import uuid from 'react-native-uuid'
+// import uuid from 'react-native-uuid'
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -44,39 +44,43 @@ export default class SignUp extends Component {
     this.setState({ showCamera: !this.state.showCamera });
   }
 
-  snap() {}
+  handleSignUp() {
+    let subjectId = createId(16)
+    const { first, last, email, password, cardNum } = this.state
+    const photos = this.state.photos.map(pic => pic.base64)
+    const user = {
+      first,
+      last,
+      email,
+      password,
+      cardNum,
+      subjectId
+    }
+    const kairoParams = {
+      subject_id: subjectId,
+      gallery_name: 'go-gallery-5',
+      image: photos[0]
 
-//   sendToKairos = () => {
-//     let subject_id = random.generate()
-//     let params = {
-//       image: this.state.images[0],
-//       subject_id,
-//       gallery_name: "go-gallery-5",
-//       selector: "SETPOSE"
-//     };
-//     client
-//       .enroll(params)
-//       .then(res => {
-//         console.log(res);
-//         params.image = this.state.images[1];
-//         return client.enroll(params);
-//       })
-//       .then(res => {
-//         console.log(res);
-//         params.image = this.state.images[2];
-//         return client.enroll(params);
-//       })
-//       .then(res => {
-//         console.log('last image', res)
-//         //post to our db with subj id
-//         axios.post()
-//       })
-//       .catch(err => console.log(err));
-
-//     //after sending all 3 images for that person, create subjectId on new user for signup
-
-//     //user post
-//   }
+    }
+    axios({
+      method: 'post',
+      url: 'http://localhost:8080/auth/signup-image',
+      data: kairoParams,
+      headers: {
+        'Content-Type': 'application/json',
+        'app_id': 'a85dfd9e',
+        'app_key': 'f2a5cf66a6e3c657d7f9cfbb4470ada1'
+      }
+    })
+    .then(success => {
+      console.log('came back from kairo', success)
+      return axios.post('https://smart-mart-server.herokuapp.com/auth/signup-image', user)
+    })
+    .then(user => {
+      console.log('got new user', user)
+      this.setState({ user })
+    })
+  }
   render() {
     return (
       <View>
@@ -164,3 +168,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   }
 });
+
+const createId = (length) => {
+  let text = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for(let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+}
