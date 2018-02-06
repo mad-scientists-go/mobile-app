@@ -11,6 +11,7 @@ import {
 import { Camera, Permissions } from "expo";
 import { Icon, Button, FormInput } from "react-native-elements";
 import SignUpCamera from "./SignUpCamera";
+import axios from 'axios'
 
 import secrets from '../secrets'
 
@@ -18,11 +19,11 @@ export default class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      first: '',
-      last: '',
-      cardNum: '',
+      email: 'test@aol.com',
+      password: '123',
+      first: 'john',
+      last: 'doe',
+      cardNum: '123456789123456',
       showCamera: false,
       hasCameraPermission: null,
       type: Camera.Constants.Type.front,
@@ -61,7 +62,7 @@ export default class SignUp extends Component {
     }
     axios({
       method: 'post',
-      url: 'http://localhost:8080/auth/signup-image',
+      url: 'https://api.kairos.com/enroll',
       data: kairoParams,
       headers: {
         'Content-Type': 'application/json',

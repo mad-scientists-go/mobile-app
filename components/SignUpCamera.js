@@ -31,7 +31,7 @@ export default class componentName extends Component {
         //close modal
         const snap = () => {
             // console.log(this.camera)
-            return this.camera.takePictureAsync()
+            return this.camera.takePictureAsync({ base64: true })
             .then(pic => {
                 if(this.cnt > 2) {
                     clearInterval(interval)
