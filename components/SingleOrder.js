@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, Animated } from 'react-native';
 import { getOrder  } from '../utils/api'
+import { dateReformat } from '../utils/helpers'
 import TextButton from './TextButton'
 import { orange, white } from '../utils/colors'
 import { NavigationActions } from 'react-navigation';
@@ -13,7 +14,10 @@ export default class SingleOrder extends Component {
     order: {},
     opacity: new Animated.Value(0)
   }
-
+  constructor(props){
+    super(props)
+    this.goToDisputeForm = this.goToDisputeForm.bind(this)
+  }
   // static navigationOptions = ({navigation}) => ({
   //   title: navigation.state.params.name
   // });
@@ -21,16 +25,19 @@ export default class SingleOrder extends Component {
   componentDidMount() {
     const { opacity } = this.state;
     getOrder(this.props.navigation.state.params.name)
-      .then((results) => this.setState(() => ({order: results})))
+      .then((results) => {
+        results["createdAt"] = dateReformat(results["createdAt"])
+        this.setState(() => ({order: results}))
+      })
         .then(() => Animated.timing(opacity, { toValue: 1, duration: 1000})
           .start()
         )
   }
 
-  // goToQuiz = (name) => {
-  //   const { navigate } = this.props.navigation;
-  //   return navigate('Quiz', { name })
-  // }
+   goToDisputeForm = (order) => {
+     const { navigate } = this.props.navigation;
+     return navigate('DisputeForm', {order})
+   }
 
   // handleNavBack = (qna) => {
   //   const newDeck = this.state.deck;
@@ -41,7 +48,6 @@ export default class SingleOrder extends Component {
 
   render () {
     const { order, opacity } = this.state;
-    console.log("singleOrder", order, 'name', this.props.navigation.state.params.name)
     return !order.createdAt ?
    ( <View>
       <Text>
@@ -87,7 +93,7 @@ export default class SingleOrder extends Component {
           {`$${order.subtotal}`}
         </Text>
         <TextButton
-        // onPress={() => this.addCard(deck.title)}
+        onPress={() => this.goToDisputeForm(order)}
         >
           Dispute
         </TextButton>

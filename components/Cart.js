@@ -21,7 +21,8 @@ export default class Cart extends Component {
   componentWillMount() {
     axios
       .get("http://localhost:8080/api/orders/cart/" + user.id)
-      .then(data => this.setState({ cart: data.data.lineItems, order: data.data }));
+      .then(data => this.setState({ cart: data.data.lineItems, order: data.data }))
+      .catch(err => console.log(err))
   }
   componentDidMount() {
     socket.on("mobile-cart-update", function(data) {
