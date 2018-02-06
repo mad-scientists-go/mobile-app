@@ -12,10 +12,7 @@ import { Camera, Permissions } from "expo";
 import { Icon, Button, FormInput } from "react-native-elements";
 import SignUpCamera from "./SignUpCamera";
 
-// import Kairos from "kairos-api"
-// const client = new Kairos("a85dfd9e", "f2a5cf66a6e3c657d7f9cfbb4470ada1")
-// import random from "random-key";
-// import uuid from 'react-native-uuid'
+import secrets from '../secrets'
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -68,8 +65,8 @@ export default class SignUp extends Component {
       data: kairoParams,
       headers: {
         'Content-Type': 'application/json',
-        'app_id': 'a85dfd9e',
-        'app_key': 'f2a5cf66a6e3c657d7f9cfbb4470ada1'
+        'app_id': secrets.kairos.key,
+        'app_key': secrets.kairos.secret
       }
     })
     .then(success => {
