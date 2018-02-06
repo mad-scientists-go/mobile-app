@@ -12,6 +12,7 @@ import { Constants } from 'expo';
 import { setLocalNotification } from './utils/helpers';
 import { blue, white, gray } from './utils/colors';
 
+import SignUp from './components/SignUp'
 
 function UdaciStatusBar ({ backgroundColor, ...props }) {
   return (
@@ -91,7 +92,8 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <UdaciStatusBar backgroundColor={gray} barStyle='light-content' />
-        <MainNavigator style={styles.title} />
+        {/* <MainNavigator style={styles.title} /> */}
+        <SignUp />
       </View>
     );
   }
