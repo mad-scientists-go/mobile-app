@@ -94,6 +94,7 @@ export default class App extends React.Component {
         <UdaciStatusBar backgroundColor={gray} barStyle='light-content' />
         {/* <MainNavigator style={styles.title} /> */}
         <SignUp />
+        {/* <Login /> */}
       </View>
     );
   }

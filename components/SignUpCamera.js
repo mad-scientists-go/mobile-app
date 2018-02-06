@@ -79,6 +79,12 @@ export default class componentName extends Component {
                 alignSelf="center"
                 onPress={() => this.capturePhotos()}
               />
+              <Button
+                transparent={true}
+                icon={{ name: "cancel", size: 36 }}
+                alignSelf="center"
+                onPress={() => this.props.toggleCamera()}
+              />
             </View>
           </Camera>
     )

@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableHighlight,
   Modal,
-  Image
+  Image,
+  KeyboardAvoidingView
 } from "react-native";
 import { Camera, Permissions } from "expo";
 import { Icon, Button, FormInput } from "react-native-elements";
@@ -81,89 +82,118 @@ export default class SignUp extends Component {
   }
   render() {
     return (
-      <View>
-        {/* password, first, last, cardNum */}
-        <FormInput
-          onChangeText={text => this.setState({ email: text })}
-          value={this.state.email}
-          containerStyle={styles.field}
-        />
-        <FormInput
-          onChangeText={text => this.setState({ first: text })}
-          value={this.state.first}
-          containerStyle={styles.field}
-        />
-        <FormInput
-          onChangeText={text => this.setState({ last: text })}
-          value={this.state.last}
-          containerStyle={styles.field}
-        />
-        <FormInput
-          onChangeText={text => this.setState({ cardNum: text })}
-          value={this.state.cardNum}
-          containerStyle={styles.field}
-        />
-        <View style={styles.footer}>
-          <View style={styles.photoContainer}>
-            {this.state.photos.map(img => (
-              <Image
-                style={{ height: 50, width: 50, marginLeft: 5, marginRight: 5 }}
-                source={{ uri: img.uri }}
+      <KeyboardAvoidingView behavior={'padding'} style={styles.view}>
+          <View style={styles.container}>
+            <Image
+              style={{height: 100, width: 100, alignSelf: 'center'}}
+              source={require('../smartmartcart.png')}
+            />
+            <View style={styles.form}>
+              <TextInput
+                onChangeText={text => this.setState({ email: text })}
+                value={this.state.email}
+                style={styles.inputField}
               />
-            ))}
+              <TextInput
+                onChangeText={text => this.setState({ first: text })}
+                value={this.state.first}
+                style={styles.inputField}
+              />
+              <TextInput
+                onChangeText={text => this.setState({ last: text })}
+                value={this.state.last}
+                style={styles.inputField}
+              />
+              <TextInput
+                onChangeText={text => this.setState({ cardNum: text })}
+                value={this.state.cardNum}
+                style={styles.inputField}
+              />
+            </View>
+            <View style={styles.photoContainer}>
+              {this.state.photos.map(img => (
+                <Image
+                  style={styles.thumbnail}
+                  source={{ uri: img.uri }}
+                />
+              ))}
+            </View>
+            <View style={styles.btnContainer}>
+              <Button
+                color="purple"
+                title="Sign Up"
+                onPress={() => this.handleSignUp()}
+              />
+              <Button
+                color="purple"
+                title="Take Photos"
+                onPress={() => this.setState({ showCamera: true })}
+              />
+            </View>
           </View>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <Button
-              color="purple"
-              title="Sign Up"
-              onPress={() => this.handleSignUp()}
-            />
-            <Button
-              color="purple"
-              title="Take Photos"
-              onPress={() => this.setState({ showCamera: true })}
-            />
-          </View>
-        </View>
-
-        <Modal visible={this.state.showCamera}>
-          <SignUpCamera
-            grabPhotos={this.grabPhotos}
-            toggleCamera={this.toggleCamera}
-          />
-        </Modal>
-      </View>
+          <Modal
+           visible={this.state.showCamera}
+           animationType={'slide'}
+           onRequestClose={() => this.closeModal()}
+          >
+            <SignUpCamera toggleCamera={this.toggleCamera} grabPhotos={this.grabPhotos} />
+          </Modal>
+      </KeyboardAvoidingView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  view: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: "center",
-    alignItems: "center",
-    width: '80%'
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
   },
-  inputs: {
+  container: {
     flex: 1,
-    justifyContent: "center",
+    width: '80%',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    backgroundColor: 'white'
+  },
+  form: {
+    flex: 5,
+    justifyContent: "flex-end",
     alignItems: "center",
-    marginTop: 50
+    // width: '80%',
   },
-  footer: {
-    flex: 1
-  },
-  field: {
-    // width: "80%",
-    marginTop: 50,
-    height: 40,
-    backgroundColor: "red"
+  inputField: {
+    height: 60,
+    width: '100%',
+    backgroundColor: 'transparent',
+    borderColor: 'gray',
+    borderWidth: 1
   },
   photoContainer: {
-    flex: 1,
+    flex: 1.5,
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-around",
+    alignItems: 'center',
+    backgroundColor: 'gray',
+    borderRadius: 5,
+    marginBottom: 20
+  },
+  thumbnail: {
+    height: 80,
+    width: 80,
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 5,
+    marginBottom: 5,
+    borderRadius: 5
+  },
+  btnContainer: {
+    flex: 2,
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'flex-start'
   }
 });
 
