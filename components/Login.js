@@ -6,7 +6,8 @@ import {
   TextInput,
   KeyboardAvoidingView,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  Image
 } from 'react-native'
 import { StackNavigator } from 'react-navigation'
 import { login, ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
@@ -21,7 +22,7 @@ export default class Login extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      username: '',
+      email: '',
       password: ''
     }
     this.loginUser = this.loginUser.bind(this)
@@ -41,10 +42,14 @@ export default class Login extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
-        <View style={styles.container}>
-          <Text style={styles.header}>- LOGIN -</Text>
 
-          <TextInput style={styles.textInput} placeholder='Username' onChangeText={ (username) => this.setState({username}) } underlineColorAndroid='transparent' />
+        <View style={styles.container}>
+        <Image
+          style={{height: 150, width: 150, alignSelf: 'center'}}
+          source={require('../smartmartcart.png')}
+        />
+
+          <TextInput style={styles.textInput} placeholder='Email' onChangeText={ (email) => this.setState({email}) } underlineColorAndroid='transparent' />
 
           <TextInput style={styles.textInput} placeholder='Password' onChangeText={ (password) => this.setState({password}) } underlineColorAndroid='transparent' secureTextEntry={true} />
 
@@ -66,7 +71,7 @@ loginUser = () => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      email: this.state.username,
+      email: this.state.email,
       password: this.state.password
     })
   }).then(result => result.json())
@@ -127,6 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: blue,
     padding: 20,
     alignItems: 'center',
+    marginBottom: 50,
   },
   text: {
     color: white

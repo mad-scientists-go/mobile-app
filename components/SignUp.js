@@ -10,6 +10,7 @@ import {
   TouchableHighlight,
   Modal,
   Image,
+  ScrollView,
 } from 'react-native'
 import { StackNavigator } from 'react-navigation'
 import { login, ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
@@ -17,6 +18,7 @@ import { Camera, Permissions } from "expo";
 import { Icon, Button, FormInput } from "react-native-elements";
 import SignUpCamera from "./SignUpCamera";
 import axios from 'axios'
+import { blue, white, gray } from '../utils/colors'
 
 import secrets from '../secrets'
 
@@ -44,7 +46,7 @@ export default class SignUp extends React.Component {
   }
 
   grabPhotos(photos) {
-    console.log(photos);
+  //  console.log(photos);
     this.setState({ photos });
   }
 
@@ -113,14 +115,20 @@ export default class SignUp extends React.Component {
       //     </TouchableOpacity>
       //   </View>
       // </KeyboardAvoidingView>
+      <ScrollView style={{flex: 1}}>
       <KeyboardAvoidingView behavior={'padding'} style={styles.view}>
       <View style={styles.container}>
         <Image
-          style={{height: 100, width: 100, alignSelf: 'center'}}
+          style={{height: 150, width: 150, alignSelf: 'center'}}
           source={require('../smartmartcart.png')}
         />
         <View style={styles.form}>
-          <TextInput
+        <TextInput style={styles.textInput} placeholder='First Name' onChangeText={ (first) => this.setState({first}) } underlineColorAndroid='transparent' />
+        <TextInput style={styles.textInput} placeholder='Last Name' onChangeText={ (last) => this.setState({last}) } underlineColorAndroid='transparent' />
+        <TextInput style={styles.textInput} placeholder='Email' onChangeText={ (email) => this.setState({email}) } underlineColorAndroid='transparent' />
+        <TextInput style={styles.textInput} placeholder='Password' onChangeText={ (password) => this.setState({password}) } underlineColorAndroid='transparent' secureTextEntry={true} />
+        <TextInput style={styles.textInput} placeholder='Card Number' onChangeText={ (cardnum) => this.setState({cardnum}) } underlineColorAndroid='transparent' secureTextEntry={true} />
+          {/* <TextInput
             onChangeText={text => this.setState({ email: text })}
             value={this.state.email}
             style={styles.inputField}
@@ -139,27 +147,35 @@ export default class SignUp extends React.Component {
             onChangeText={text => this.setState({ cardNum: text })}
             value={this.state.cardNum}
             style={styles.inputField}
-          />
-        </View>
+          /> */}
         <View style={styles.photoContainer}>
           {this.state.photos.map(img => (
             <Image
+              key={img.uri}
               style={styles.thumbnail}
               source={{ uri: img.uri }}
             />
           ))}
         </View>
-        <View style={styles.btnContainer}>
-          <Button
+        {/* <View style={styles.btnContainer}> */}
+          {/* <Button
             color="purple"
             title="Sign Up"
             onPress={() => this.handleSignUp()}
-          />
-          <Button
+          /> */}
+          <TouchableOpacity style={styles.btn} onPress={() => this.setState({ showCamera: true })}>
+            <Text style={styles.text}>Take Photos</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={() => this.handleSignUp()}>
+            <Text style={styles.text}>Sign Up</Text>
+          </TouchableOpacity>
+          {/* <Button
             color="purple"
             title="Take Photos"
             onPress={() => this.setState({ showCamera: true })}
-          />
+          /> */}
+        {/* </View> */}
+
         </View>
       </View>
       <Modal
@@ -170,49 +186,13 @@ export default class SignUp extends React.Component {
         <SignUpCamera toggleCamera={this.toggleCamera} grabPhotos={this.grabPhotos} />
       </Modal>
   </KeyboardAvoidingView>
+  </ScrollView>
     )
   }
 }
 
-// loginUser = () => {
-//   //this.props.navigation.navigate('Tabs')
-//   fetch('http://localhost:8080/auth/login-mobile', {
-//     method: 'POST',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({
-//       email: this.state.username,
-//       password: this.state.password
-//     })
-//   }).then(result => result.json())
-//     .then((res) => {
-//       if (res.email) {
-//         alert(`Hello ${res.first} ${res.last}`)
-//          login(res)
-//          .then(response => this._navigateTo('Tabs'))
-//          .catch(err => console.log(err))
 
-//         // AsyncStorage.setItem('user', res.user)
 
-//       }
-//       else {
-//         alert('User not found')
-//       }
-//     })
-//     .done()
-
-//     _navigateTo = (routeName) => {
-//       const actionToDispatch = NavigationActions.reset({
-//         index: 0,
-//         actions: [NavigationActions.navigate({ routeName })]
-//       })
-//       this.props.navigation.dispatch(actionToDispatch)
-//     }
-
-// }
-// }
 // const styles = StyleSheet.create({
 //   wrapper: {
 //     flex: 1
@@ -296,6 +276,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     alignItems: 'flex-start'
+  },
+  textInput: {
+    alignSelf: 'stretch',
+    padding: 16,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: gray
+  },
+  btn: {
+    alignSelf: 'stretch',
+    backgroundColor: blue,
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  text: {
+    color: white
   }
 });
 
