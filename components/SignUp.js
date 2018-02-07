@@ -44,7 +44,7 @@ export default class SignUp extends Component {
   }
 
   handleSignUp() {
-    let subjectId = createId(16)
+    let subject_id = createId(16)
     const { first, last, email, password, cardNum } = this.state
     const photos = this.state.photos.map(pic => pic.base64)
     const user = {
@@ -53,10 +53,10 @@ export default class SignUp extends Component {
       email,
       password,
       cardNum,
-      subjectId
+      subject_id
     }
     const kairoParams = {
-      subject_id: subjectId,
+      subject_id,
       gallery_name: 'go-gallery-5',
       image: photos[0]
 
