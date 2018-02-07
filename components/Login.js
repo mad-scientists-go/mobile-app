@@ -9,7 +9,7 @@ import {
   AsyncStorage,
   Image
 } from 'react-native'
-import { StackNavigator } from 'react-navigation'
+import { StackNavigator, NavigationActions } from 'react-navigation'
 import { login, ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
 import { blue, white, gray } from '../utils/colors'
 
@@ -26,6 +26,7 @@ export default class Login extends React.Component {
       password: ''
     }
     this.loginUser = this.loginUser.bind(this)
+   // this._navigateTo = this._navigateTo.bind(this)
   }
 
   // componentDidMount() {
@@ -79,10 +80,13 @@ loginUser = () => {
       if (res.email) {
         alert(`Hello ${res.first} ${res.last}`)
          login(res)
-         .then(response => this._navigateTo('Tabs'))
+         .then(response => {
+           this.props.navigation.navigate('Tabs')
+          // this._navigateTo('Tabs')
+          })
          .catch(err => console.log(err))
-
-        // AsyncStorage.setItem('user', res.user)
+        //  login(res)
+        // AsyncStorage.setItem(ORDER_HISTORY_STORAGE_KEY, res.user)
 
       }
       else {
@@ -90,7 +94,7 @@ loginUser = () => {
       }
     })
     .done()
-
+  }
     _navigateTo = (routeName) => {
       const actionToDispatch = NavigationActions.reset({
         index: 0,
@@ -99,7 +103,7 @@ loginUser = () => {
       this.props.navigation.dispatch(actionToDispatch)
     }
 
-}
+
 }
 const styles = StyleSheet.create({
   wrapper: {

@@ -38,7 +38,7 @@ export default class Cart extends Component {
       this._navigateTo('AuthTabs')
     }
     else {
-      this._navigateTo('AuthTabs')
+      this._navigateTo('Tabs')
     }
   }, 2500)
   }
