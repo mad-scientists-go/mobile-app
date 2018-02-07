@@ -97,7 +97,10 @@ export default class SignUp extends React.Component {
     })
     .then(user => {
       console.log('got new user', user)
+
       this.setState({ user })
+      //send user object to async storage
+      //navigate to orders Tab
     })
   }
   render() {
@@ -163,12 +166,23 @@ export default class SignUp extends React.Component {
             title="Sign Up"
             onPress={() => this.handleSignUp()}
           /> */}
-          <TouchableOpacity style={styles.btn} onPress={() => this.setState({ showCamera: true })}>
-            <Text style={styles.text}>Take Photos</Text>
-          </TouchableOpacity>
+          {this.state.photos.length ?
+          <View style={[styles.container, {width: '100%'}]}>
           <TouchableOpacity style={styles.btn} onPress={() => this.handleSignUp()}>
             <Text style={styles.text}>Sign Up</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={() => {
+            this.setState({ showCamera: true, photos: [] })
+            }}>
+          <Text style={styles.text}>Retake Photos</Text>
+        </TouchableOpacity>
+        </View>
+          :
+          <TouchableOpacity style={styles.takePhotosBtn} onPress={() => this.setState({ showCamera: true })}>
+            <Text style={styles.text}>Take Photos</Text>
+          </TouchableOpacity>
+
+          }
           {/* <Button
             color="purple"
             title="Take Photos"
@@ -254,11 +268,12 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   photoContainer: {
+    width: '100%',
     flex: 1.5,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: 'center',
-    backgroundColor: 'gray',
+    backgroundColor: gray,
     borderRadius: 5,
     marginBottom: 20
   },
@@ -294,6 +309,13 @@ const styles = StyleSheet.create({
   },
   text: {
     color: white
+  },
+  takePhotosBtn: {
+    alignSelf: 'stretch',
+    backgroundColor: blue,
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 100,
   }
 });
 

@@ -30,7 +30,7 @@ export default class Login extends React.Component {
   }
 
   // componentDidMount() {
-  //   this._loadInitialState().done()
+  //   this.setState({email: '', password: ''})
   // }
 
   // _loadInitialState = async () => {
