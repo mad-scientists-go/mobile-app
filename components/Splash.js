@@ -35,10 +35,10 @@ export default class Cart extends Component {
     let value = await AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
     setTimeout(() => {
     if (value !== null) {
-      this._navigateTo('Tabs')
+      this._navigateTo('AuthTabs')
     }
     else {
-      this._navigateTo('Login')
+      this._navigateTo('AuthTabs')
     }
   }, 2500)
   }

@@ -23,7 +23,6 @@ export default class componentName extends Component {
         this.cnt = 0
       }
 
-      
 
     capturePhotos() {
         //take 3 shots
@@ -39,7 +38,7 @@ export default class componentName extends Component {
                     this.props.grabPhotos(this.state.photos)
                     this.props.toggleCamera()
                 }
-                console.log('working', pic)
+                // console.log('working', pic)
                 this.setState({ photos: [...this.state.photos, pic]})
                 this.cnt++
             })

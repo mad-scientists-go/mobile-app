@@ -1,24 +1,35 @@
-import React, { Component } from "react";
+import React from 'react'
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
+  View,
   TextInput,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  AsyncStorage,
   TouchableHighlight,
   Modal,
   Image,
-  KeyboardAvoidingView
-} from "react-native";
+  ScrollView,
+} from 'react-native'
+import { StackNavigator } from 'react-navigation'
+import { login, ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
 import { Camera, Permissions } from "expo";
 import { Icon, Button, FormInput } from "react-native-elements";
 import SignUpCamera from "./SignUpCamera";
 import axios from 'axios'
+import { blue, white, gray } from '../utils/colors'
 
 import secrets from '../secrets'
 
-export default class SignUp extends Component {
-  constructor(props) {
-    super(props);
+export default class SignUp extends React.Component {
+
+  // static navigationOptions = {
+  //   header: null
+  // }
+
+  constructor(props){
+    super(props)
     this.state = {
       email: 'test@aol.com',
       password: '123',
@@ -29,20 +40,29 @@ export default class SignUp extends Component {
       hasCameraPermission: null,
       type: Camera.Constants.Type.front,
       photos: []
-    };
+    }
     this.grabPhotos = this.grabPhotos.bind(this);
     this.toggleCamera = this.toggleCamera.bind(this);
   }
 
   grabPhotos(photos) {
-    console.log(photos);
+  //  console.log(photos);
     this.setState({ photos });
   }
 
   toggleCamera() {
     this.setState({ showCamera: !this.state.showCamera });
   }
+  // componentDidMount() {
+  //   this._loadInitialState().done()
+  // }
 
+  // _loadInitialState = async () => {
+  //   let value = await AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
+  //   if (value !== null) {
+  //     this.props.navigation.navigate('Tabs')
+  //   }
+  // }
   handleSignUp() {
     let subject_id = createId(16)
     const { first, last, email, password, cardNum } = this.state
@@ -194,6 +214,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     alignItems: 'flex-start'
+  },
+  textInput: {
+    alignSelf: 'stretch',
+    padding: 16,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: gray
+  },
+  btn: {
+    alignSelf: 'stretch',
+    backgroundColor: blue,
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  text: {
+    color: white
   }
 });
 
