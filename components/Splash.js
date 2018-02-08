@@ -6,9 +6,9 @@ import axios from "axios";
 import { List, ListItem } from "react-native-elements";
 import { ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
 
-const user = { id: 1, email: "rayzorboriqua280@aol.com" };
+//const user = { id: 1, email: "rayzorboriqua280@aol.com" };
 
-const socket = io("http://localhost:8080");
+const socket = io("https://smart-mart-server.herokuapp.com");
 export default class Cart extends Component {
   constructor(props) {
     super(props);
@@ -34,11 +34,11 @@ export default class Cart extends Component {
   _loadInitialState = async () => {
     let value = await AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
     setTimeout(() => {
-    if (value !== null) {
-      this._navigateTo('Tabs')
+    if (value === null) {
+      this._navigateTo('AuthTabs')
     }
     else {
-      this._navigateTo('Login')
+      this._navigateTo('Tabs')
     }
   }, 2500)
   }

@@ -3,6 +3,7 @@ import {  TextInput, StyleSheet, View, AsyncStorage } from 'react-native';
 import TextButton from './TextButton';
 import { ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
 
+
 export default class UselessTextInput extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,7 @@ export default class UselessTextInput extends Component {
     this.setState({email})
   }
   sendDispute() {
-    fetch('http://localhost:8080/auth/sendDispute', {
+    fetch('https://smart-mart-server.herokuapp.com/auth/sendDispute', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -28,7 +29,7 @@ export default class UselessTextInput extends Component {
     body: JSON.stringify({
       fromEmail: this.state.email,
       disputeMessage: this.state.text,
-      orderInfo: this.props.navigation.state.params.order
+      orderInfo: JSON.stringify(this.props.navigation.state.params.order)
     })
   })
   .then(() => console.log('dispute sent'))

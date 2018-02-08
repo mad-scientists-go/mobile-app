@@ -6,10 +6,12 @@ import {
   TextInput,
   KeyboardAvoidingView,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  Image
 } from 'react-native'
-import { StackNavigator } from 'react-navigation'
+import { StackNavigator, NavigationActions } from 'react-navigation'
 import { login, ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
+import { blue, white, gray } from '../utils/colors'
 
 export default class Login extends React.Component {
 
@@ -20,14 +22,15 @@ export default class Login extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      username: '',
+      email: '',
       password: ''
     }
     this.loginUser = this.loginUser.bind(this)
+   // this._navigateTo = this._navigateTo.bind(this)
   }
 
   // componentDidMount() {
-  //   this._loadInitialState().done()
+  //   this.setState({email: '', password: ''})
   // }
 
   // _loadInitialState = async () => {
@@ -40,15 +43,19 @@ export default class Login extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
-        <View style={styles.container}>
-          <Text style={styles.header}>- LOGIN -</Text>
 
-          <TextInput style={styles.textInput} placeholder='Username' onChangeText={ (username) => this.setState({username}) } underlineColorAndroid='transparent' />
+        <View style={styles.container}>
+        <Image
+          style={{height: 150, width: 150, alignSelf: 'center'}}
+          source={require('../smartmartcart.png')}
+        />
+
+          <TextInput style={styles.textInput} placeholder='Email' onChangeText={ (email) => this.setState({email}) } underlineColorAndroid='transparent' />
 
           <TextInput style={styles.textInput} placeholder='Password' onChangeText={ (password) => this.setState({password}) } underlineColorAndroid='transparent' secureTextEntry={true} />
 
           <TouchableOpacity style={styles.btn} onPress={this.loginUser}>
-            <Text>Log in</Text>
+            <Text style={styles.text}>Log in</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -58,25 +65,32 @@ export default class Login extends React.Component {
 
 loginUser = () => {
   //this.props.navigation.navigate('Tabs')
-  fetch('http://localhost:8080/auth/login-mobile', {
+  fetch('https://smart-mart-server.herokuapp.com/auth/login-mobile', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      email: this.state.username,
+      email: this.state.email,
       password: this.state.password
     })
-  }).then(result => result.json())
+  })
+  .then(result => {
+    console.log('res', result )
+   return JSON.parse(result["_bodyInit"])})
     .then((res) => {
-      if (res.email) {
-        alert(`Hello ${res.first} ${res.last}`)
+    //  console.log('res', res )
+      if (res["email"]) {
+        alert(`Hello ${res["first"]} ${res["last"]}`)
          login(res)
-         .then(response => this._navigateTo('Tabs'))
+         .then(response => {
+           //this.props.navigation.navigate('Tabs')
+          this._navigateTo('Tabs')
+          })
          .catch(err => console.log(err))
-
-        // AsyncStorage.setItem('user', res.user)
+        //  login(res)
+        // AsyncStorage.setItem(ORDER_HISTORY_STORAGE_KEY, res.user)
 
       }
       else {
@@ -84,7 +98,7 @@ loginUser = () => {
       }
     })
     .done()
-
+  }
     _navigateTo = (routeName) => {
       const actionToDispatch = NavigationActions.reset({
         index: 0,
@@ -93,7 +107,7 @@ loginUser = () => {
       this.props.navigation.dispatch(actionToDispatch)
     }
 
-}
+
 }
 const styles = StyleSheet.create({
   wrapper: {
@@ -103,7 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#2896d3',
+    backgroundColor: white,
     paddingLeft: 40,
     paddingRight: 40
   },
@@ -117,12 +131,18 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     padding: 16,
     marginBottom: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: gray
   },
   btn: {
     alignSelf: 'stretch',
-    backgroundColor: '#01c853',
+    backgroundColor: blue,
     padding: 20,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  text: {
+    color: white
   }
 })
