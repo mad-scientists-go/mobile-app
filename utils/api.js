@@ -21,13 +21,13 @@ export function login ( user ) {
 
  return AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
   .then(res => {
-   let resJs = JSON.parse(res)
-   console.log('storageres', resJs.email === user.email)
-      if (resJs.email !== user.email) {
+  //  let usesrJs = JSON.parse(user)
+  //  console.log('storageres', user.email)
+  //     // if (resJs !== user) {
        return AsyncStorage.removeItem(ORDER_HISTORY_STORAGE_KEY)
         .then(() =>  AsyncStorage.setItem(ORDER_HISTORY_STORAGE_KEY, JSON.stringify(user)))
         .then(() =>  AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY))
-      }
+      // }
      })
 }
 
@@ -43,7 +43,7 @@ export function login ( user ) {
 
 
 function formatOrderResults (results) {
-  return results === null
+  return results !== null
     ? setDummyOrders()
     : JSON.parse(results)
 }
