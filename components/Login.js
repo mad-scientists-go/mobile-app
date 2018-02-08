@@ -76,9 +76,11 @@ loginUser = () => {
       password: this.state.password
     })
   })
-  .then(result => JSON.parse(result["_bodyInit"]))
+  .then(result => {
+    console.log('res', JSON.parse(result["_bodyInit"]) )
+   return JSON.parse(result["_bodyInit"])})
     .then((res) => {
-      console.log('res', res )
+    //  console.log('res', res )
       if (res["email"]) {
         alert(`Hello ${res["first"]} ${res["last"]}`)
          login(res)

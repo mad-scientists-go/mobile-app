@@ -22,6 +22,16 @@ import { blue, white, gray } from '../utils/colors'
 //if (process.env.NODE_ENV !== 'production') require('../secrets')
 import { KAIROS_ID, KAIROS_KEY } from '../secrets'
 
+
+const createId = (length) => {
+  let text = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for(let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+}
+
 export default class SignUp extends React.Component {
 
   static navigationOptions = {
@@ -93,7 +103,7 @@ export default class SignUp extends React.Component {
       }
     })
     .then(success => {
-      //console.log('came back from kairo', success)
+      console.log('came back from kairo', success)
       return axios.post('https://smart-mart-server.herokuapp.com/auth/signup-image', user)
     })
     .then(res => res.data)
@@ -147,7 +157,7 @@ export default class SignUp extends React.Component {
         <TextInput style={styles.textInput} placeholder='Last Name' onChangeText={ (last) => this.setState({last}) } underlineColorAndroid='transparent' />
         <TextInput style={styles.textInput} placeholder='Email' onChangeText={ (email) => this.setState({email}) } underlineColorAndroid='transparent' />
         <TextInput style={styles.textInput} placeholder='Password' onChangeText={ (password) => this.setState({password}) } underlineColorAndroid='transparent' secureTextEntry={true} />
-        <TextInput style={styles.textInput} placeholder='Card Number' onChangeText={ (cardnum) => this.setState({cardnum}) } underlineColorAndroid='transparent' secureTextEntry={true} />
+        <TextInput style={styles.textInput} placeholder='Card Number' onChangeText={ (cardNum) => this.setState({cardNum}) } underlineColorAndroid='transparent' secureTextEntry={true} />
           {/* <TextInput
             onChangeText={text => this.setState({ email: text })}
             value={this.state.email}
@@ -377,11 +387,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const createId = (length) => {
-  let text = "";
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for(let i = 0; i < length; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-}
+
