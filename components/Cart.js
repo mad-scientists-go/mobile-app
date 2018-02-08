@@ -7,7 +7,7 @@ import { List, ListItem } from "react-native-elements";
 
 const user = { id: 1, email: "rayzorboriqua280@aol.com" };
 
-const socket = io("http://localhost:8080");
+const socket = io("https://smart-mart-server.herokuapp.com");
 export default class Cart extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +20,7 @@ export default class Cart extends Component {
 
   componentWillMount() {
     axios
-      .get("http://localhost:8080/api/orders/cart/" + user.id)
+      .get("https://smart-mart-server.herokuapp.com/api/orders/cart/" + user.id)
       .then(data => this.setState({ cart: data.data.lineItems, order: data.data }))
       .catch(err => console.log(err))
   }
@@ -29,6 +29,11 @@ export default class Cart extends Component {
       console.log("smobile socket working");
       this.setState({ cart: data });
     });
+
+    //when this user walks in grab newly created order from event, cart is empty.
+    socket.on(`new-instore-user-${user.id}`, (data) => {
+      this.setState({ order: data.order })
+    })
   }
 
   render() {
