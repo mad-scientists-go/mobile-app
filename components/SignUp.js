@@ -104,7 +104,7 @@ export default class SignUp extends React.Component {
     })
     .then(success => {
       console.log('came back from kairo', success)
-      return axios.post('https://smart-mart-server.herokuapp.com/auth/signup-image', user)
+      return axios.post('http://localhost:8080/auth/signup-image', user)
     })
     .then(res => res.data)
     .then(res => {
