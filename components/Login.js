@@ -65,7 +65,7 @@ export default class Login extends React.Component {
 
 loginUser = () => {
   //this.props.navigation.navigate('Tabs')
-  fetch('http://localhost:8080/auth/login-mobile', {
+  fetch('https://smart-mart-server.herokuapp.com/auth/login-mobile', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -77,7 +77,7 @@ loginUser = () => {
     })
   })
   .then(result => {
-    console.log('res', JSON.parse(result["_bodyInit"]) )
+    console.log('res', result )
    return JSON.parse(result["_bodyInit"])})
     .then((res) => {
     //  console.log('res', res )

@@ -43,7 +43,7 @@ export function login ( user ) {
 
 
 function formatOrderResults (results) {
-  return results === null
+  return results !== null
     ? setDummyOrders()
     : JSON.parse(results)
 }

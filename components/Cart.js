@@ -21,7 +21,9 @@ export default class Cart extends Component {
   componentWillMount() {
     axios
       .get("https://smart-mart-server.herokuapp.com/api/orders/cart/" + user.id)
-      .then(data => this.setState({ cart: data.data.lineItems, order: data.data }))
+      .then(data => {
+        if (data.data) this.setState({ cart: data.data.lineItems, order: data.data })
+      })
       .catch(err => console.log(err))
   }
   componentDidMount() {

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, ScrollView, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, TouchableOpacity } from 'react-native';
 import { fetchOrders  } from '../utils/api';
 import { dateReformat } from '../utils/helpers';
 import { NavigationActions } from 'react-navigation';
 import SingleOrder from './SingleOrder';
 import { white } from '../utils/colors';
+import { Container, Header, Content, Card, CardItem, Text, Icon, Right } from 'native-base';
 
 export default class OrderList extends Component {
   state = {
@@ -40,18 +41,32 @@ export default class OrderList extends Component {
       <ScrollView>
       {orders.map((order, i) => {
         return (
-          <View style={styles.container} key={order.id}>
-            <TouchableOpacity onPress={() => this.goToOrder(i)}>
-            <View style={styles.card}>
-              <Text style={styles.title}>
-              {order.createdAt}
-              </Text>
-              <Text style={{fontSize: 25}}>
-                {`$${order.subtotal}`}
-              </Text>
-            </View>
-            </TouchableOpacity>
-          </View>
+          <Container key={order.id}>
+        {/* <Header /> */}
+        <Content>
+          <Card>
+            <CardItem>
+              <Icon active name="logo-googleplus" />
+              <Text>Google Plus</Text>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+             </CardItem>
+           </Card>
+        </Content>
+      </Container>
+          // <View style={styles.container} key={order.id}>
+          //   <TouchableOpacity onPress={() => this.goToOrder(i)}>
+          //   <View style={styles.card}>
+          //     <Text style={styles.title}>
+          //     {order.createdAt}
+          //     </Text>
+          //     <Text style={{fontSize: 25}}>
+          //       {`$${order.subtotal}`}
+          //     </Text>
+          //   </View>
+          //   </TouchableOpacity>
+          // </View>
         )
       })}
     </ScrollView>
@@ -67,6 +82,17 @@ export default class OrderList extends Component {
     )
   }
 }
+
+
+// export default class CardListExample extends Component {
+//   render() {
+//     return (
+
+//     )
+//   }
+// }
+
+
 
 const styles = StyleSheet.create({
   container: {
