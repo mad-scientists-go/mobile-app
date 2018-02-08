@@ -6,7 +6,7 @@ import axios from "axios";
 import { List, ListItem } from "react-native-elements";
 import { ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
 
-const user = { id: 1, email: "rayzorboriqua280@aol.com" };
+//const user = { id: 1, email: "rayzorboriqua280@aol.com" };
 
 const socket = io("http://localhost:8080");
 export default class Cart extends Component {

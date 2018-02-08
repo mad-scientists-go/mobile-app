@@ -18,8 +18,11 @@ export default class OrderList extends Component {
   componentDidMount() {
     fetchOrders()
       .then((results) => {
+        if (results){
           results.forEach(order => order["createdAt"] = dateReformat(order["createdAt"]))
         this.setState(() => ({orders: results}))
+        }
+
       })
       .catch(err => console.log(err))
   }

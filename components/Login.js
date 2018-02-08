@@ -75,14 +75,16 @@ loginUser = () => {
       email: this.state.email,
       password: this.state.password
     })
-  }).then(result => result.json())
+  })
+  .then(result => JSON.parse(result["_bodyInit"]))
     .then((res) => {
-      if (res.email) {
-        alert(`Hello ${res.first} ${res.last}`)
+      console.log('res', res )
+      if (res["email"]) {
+        alert(`Hello ${res["first"]} ${res["last"]}`)
          login(res)
          .then(response => {
-           this.props.navigation.navigate('Tabs')
-          // this._navigateTo('Tabs')
+           //this.props.navigation.navigate('Tabs')
+          this._navigateTo('Tabs')
           })
          .catch(err => console.log(err))
         //  login(res)
