@@ -20,7 +20,7 @@ export default class UselessTextInput extends Component {
     this.setState({email})
   }
   sendDispute() {
-    fetch('http://localhost:8080/auth/sendDispute', {
+    fetch('https://smart-mart-server.herokuapp.com/auth/sendDispute', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

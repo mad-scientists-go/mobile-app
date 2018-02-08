@@ -7,7 +7,7 @@ import { List, ListItem } from "react-native-elements";
 import {ORDER_HISTORY_STORAGE_KEY} from '../utils/api'
 // const user = { id: 1, email: "rayzorboriqua280@aol.com" };
 
-const socket = io("http://localhost:8080");
+const socket = io("https://smart-mart-server.herokuapp.com");
 export default class Cart extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +21,7 @@ export default class Cart extends Component {
 
   componentWillMount() {
     axios
-      .get("http://localhost:8080/api/orders/cart/" + user.id)
+      .get("https://smart-mart-server.herokuapp.com/api/orders/cart/" + user.id)
       .then(data => {
         if (data.data) this.setState({ cart: data.data.lineItems, order: data.data })
       })
@@ -31,7 +31,7 @@ export default class Cart extends Component {
     AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
     .then(data => {
       data = JSON.parse(data)
-      return axios.get("http://localhost:8080/api/orders/cart/" + data.id)
+      return axios.get("https://smart-mart-server.herokuapp.com/api/orders/cart/" + data.id)
     })
       .then(data => {
         if(data.data) {
