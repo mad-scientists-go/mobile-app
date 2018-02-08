@@ -1,20 +1,21 @@
 import React, { Component } from "react";
-import { ScrollView, StyleSheet, Text, View, TextInput } from "react-native";
+import { ScrollView, StyleSheet, Text, View, TextInput, AsyncStorage } from "react-native";
 import { NavigationActions } from "react-navigation";
 import io from "socket.io-client";
 import axios from "axios";
 import { List, ListItem } from "react-native-elements";
+import {ORDER_HISTORY_STORAGE_KEY} from '../utils/api'
+// const user = { id: 1, email: "rayzorboriqua280@aol.com" };
 
-const user = { id: 1, email: "rayzorboriqua280@aol.com" };
-
-const socket = io("https://smart-mart-server.herokuapp.com");
+const socket = io("http://localhost:8080");
 export default class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
       text: "hello world",
       cart: [],
-      order: []
+      order: [],
+      user: {}
     };
   }
 
@@ -27,15 +28,27 @@ export default class Cart extends Component {
       .catch(err => console.log(err))
   }
   componentDidMount() {
-    socket.on("mobile-cart-update", function(data) {
-      console.log("smobile socket working");
-      this.setState({ cart: data });
-    });
-
-    //when this user walks in grab newly created order from event, cart is empty.
-    socket.on(`new-instore-user-${user.id}`, (data) => {
-      this.setState({ order: data.order })
+    AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
+    .then(data => {
+      data = JSON.parse(data)
+      return axios.get("http://localhost:8080/api/orders/cart/" + data.id)
     })
+      .then(data => {
+        if(data.data) {
+          this.setState({ cart: data.data.lineItems })
+          socket.on("mobile-cart-update", function(data) {
+            console.log("smobile socket working");
+            this.setState({ cart: data.lineItems });
+          });
+
+          //when this user walks in grab newly created order from event, cart is empty.
+          socket.on(`new-instore-user-${user.id}`, (data) => {
+            this.setState({ order: data.order })
+          })
+        }
+      })
+      .catch(err => console.log(err))
+
   }
 
   render() {
