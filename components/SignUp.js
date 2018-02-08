@@ -45,7 +45,7 @@ export default class SignUp extends React.Component {
       password: '123',
       first: 'john',
       last: 'doe',
-      cardNum: '123456789123456',
+      card_num: '123456789123456',
       showCamera: false,
       hasCameraPermission: null,
       type: Camera.Constants.Type.front,
@@ -75,19 +75,19 @@ export default class SignUp extends React.Component {
   //   }
   // }
   handleSignUp() {
-    let subjectId = createId(16)
-    const { first, last, email, password, cardNum } = this.state
+    let subject_id = createId(16)
+    const { first, last, email, password, card_num } = this.state
     const photos = this.state.photos.map(pic => pic.base64)
     const user = {
       first,
       last,
       email,
       password,
-      cardNum,
-      subjectId
+      card_num,
+      subject_id
     }
     const kairoParams = {
-      subject_id: subjectId,
+      subject_id,
       gallery_name: 'go-gallery-5',
       image: photos[0]
 
