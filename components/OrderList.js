@@ -33,7 +33,7 @@ export default class OrderList extends Component {
 
   render () {
     const { orders } = this.state
-    return (
+    return orders.length ? (
       <ScrollView>
       {orders.map((order, i) => {
         return (
@@ -52,6 +52,15 @@ export default class OrderList extends Component {
         )
       })}
     </ScrollView>
+    )
+    :
+    (
+      <View style={styles.container}>
+        <Text style={{fontSize: 25}}>
+            Thank you for signing for Smart Mart!
+            Say goodbye to waiting in line!
+        </Text>
+      </View>
     )
   }
 }

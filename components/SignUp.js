@@ -12,15 +12,15 @@ import {
   Image,
   ScrollView,
 } from 'react-native'
-import { StackNavigator } from 'react-navigation'
+import { StackNavigator, NavigationActions } from 'react-navigation'
 import { login, ORDER_HISTORY_STORAGE_KEY } from '../utils/api'
 import { Camera, Permissions } from "expo";
 import { Icon, Button, FormInput } from "react-native-elements";
 import SignUpCamera from "./SignUpCamera";
 import axios from 'axios'
 import { blue, white, gray } from '../utils/colors'
-
-import secrets from '../secrets'
+//if (process.env.NODE_ENV !== 'production') require('../secrets')
+import { KAIROS_ID, KAIROS_KEY } from '../secrets'
 
 export default class SignUp extends React.Component {
 
@@ -43,6 +43,7 @@ export default class SignUp extends React.Component {
     }
     this.grabPhotos = this.grabPhotos.bind(this);
     this.toggleCamera = this.toggleCamera.bind(this);
+    this.loginUser = this.loginUser.bind(this)
   }
 
   grabPhotos(photos) {
@@ -87,18 +88,34 @@ export default class SignUp extends React.Component {
       data: kairoParams,
       headers: {
         'Content-Type': 'application/json',
-        'app_id': secrets.kairos.key,
-        'app_key': secrets.kairos.secret
+        'app_id': KAIROS_ID,
+        'app_key': KAIROS_KEY
       }
     })
     .then(success => {
-      console.log('came back from kairo', success)
+      //console.log('came back from kairo', success)
       return axios.post('https://smart-mart-server.herokuapp.com/auth/signup-image', user)
     })
-    .then(user => {
-      console.log('got new user', user)
+    .then(res => res.data)
+    .then(res => {
+      console.log('got new user', res)
 
-      this.setState({ user })
+     // this.setState({ user })
+     if (res.email) {
+      alert(`Welcome ${res.first} ${res.last}`)
+       login(res)
+       .then(response => {
+         this.props.navigation.navigate('Tabs')
+        // this._navigateTo('Tabs')
+        })
+       .catch(err => console.log(err))
+      //  login(res)
+      // AsyncStorage.setItem(ORDER_HISTORY_STORAGE_KEY, res.user)
+
+    }
+    else {
+      alert('User not found')
+    }
       //send user object to async storage
       //navigate to orders Tab
     })
@@ -203,6 +220,47 @@ export default class SignUp extends React.Component {
   </ScrollView>
     )
   }
+  loginUser = () => {
+    //this.props.navigation.navigate('Tabs')
+    fetch('https://smart-mart-server.herokuapp.com/auth/login-mobile', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password
+      })
+    }).then(result => result.json())
+      .then((res) => {
+        if (res.email) {
+          alert(`Welcome ${res.first} ${res.last}`)
+           login(res)
+           .then(response => {
+             this.props.navigation.navigate('Tabs')
+            // this._navigateTo('Tabs')
+            })
+           .catch(err => console.log(err))
+          //  login(res)
+          // AsyncStorage.setItem(ORDER_HISTORY_STORAGE_KEY, res.user)
+
+        }
+        else {
+          alert('User not found')
+        }
+      })
+      .done()
+    }
+      _navigateTo = (routeName) => {
+        const actionToDispatch = NavigationActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName })]
+        })
+        this.props.navigation.dispatch(actionToDispatch)
+      }
+
+
 }
 
 
