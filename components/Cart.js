@@ -7,7 +7,7 @@ import { List, ListItem } from "react-native-elements";
 
 const user = { id: 1, email: "rayzorboriqua280@aol.com" };
 
-const socket = io("https://smart-mart-server.herokuapp.com");
+const socket = io("http://localhost:8080");
 export default class Cart extends Component {
   constructor(props) {
     super(props);
@@ -20,14 +20,18 @@ export default class Cart extends Component {
 
   componentWillMount() {
     axios
-      .get("https://smart-mart-server.herokuapp.com/api/orders/cart/" + user.id)
-      .then(data => this.setState({ cart: data.data.lineItems, order: data.data }))
+      .get("http://localhost:8080/api/orders/cart/" + user.id)
+      .then(data => {
+        if(data.data) {
+          this.setState({ cart: data.data.lineItems })
+        }
+      })
       .catch(err => console.log(err))
   }
   componentDidMount() {
     socket.on("mobile-cart-update", function(data) {
       console.log("smobile socket working");
-      this.setState({ cart: data });
+      this.setState({ cart: data.lineItems });
     });
 
     //when this user walks in grab newly created order from event, cart is empty.
