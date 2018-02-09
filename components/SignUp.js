@@ -111,7 +111,7 @@ export default class SignUp extends React.Component {
       console.log('got new user', res)
 
      // this.setState({ user })
-     if (res.email) {
+     if (res.email) { 
       alert(`Welcome ${res.first} ${res.last}`)
        login(res)
        .then(response => {

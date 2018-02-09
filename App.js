@@ -26,6 +26,9 @@ const Tabs = TabNavigator({
   OrderList: {
     screen: OrderList,
     navigationOptions: {
+      headerStyle:{
+        backgroundColor: blue
+      },
       tabBarLabel: 'Order History',
       tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name='cards' size={35} color={tintColor} />
     }
@@ -33,6 +36,9 @@ const Tabs = TabNavigator({
   Cart: {
     screen: Cart,
     navigationOptions: {
+      headerStyle:{
+        backgroundColor: blue
+      },
       tabBarLabel: 'My Cart',
       tabBarIcon: ({ tintColor }) => <FontAwesome name='shopping-cart' size={30} color={tintColor} />
     }
