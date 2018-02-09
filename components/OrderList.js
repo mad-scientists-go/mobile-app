@@ -1,119 +1,100 @@
-import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, TouchableOpacity } from 'react-native';
-import { fetchOrders  } from '../utils/api';
-import { dateReformat } from '../utils/helpers';
-import { NavigationActions } from 'react-navigation';
-import SingleOrder from './SingleOrder';
-import { white } from '../utils/colors';
-import { Container, Header, Content, Card, CardItem, Text, Icon, Right } from 'native-base';
+import React, { Component } from "react";
+import { StyleSheet, ScrollView, View, TouchableOpacity } from "react-native";
+import { fetchOrders } from "../utils/api";
+import { dateReformat } from "../utils/helpers";
+import { NavigationActions } from "react-navigation";
+import SingleOrder from "./SingleOrder";
+import { white, blue, gray } from "../utils/colors";
+import {
+  Container,
+  Header,
+  Content,
+  Card,
+  CardItem,
+  Text,
+  Icon,
+  Right
+} from "native-base";
 
 export default class OrderList extends Component {
   state = {
     orders: []
-  }
-
-  static navigationOptions = {
-    title: 'Order History',
   };
 
-  componentDidMount() {
+  static navigationOptions = {
+    title: "My Reciepts"
+  };
+
+  componentWillMount() {
     fetchOrders()
-      .then((results) => {
-        if (results){
-          results.forEach(order => order["createdAt"] = dateReformat(order["createdAt"]))
-        this.setState(() => ({orders: results}))
+      .then(results => {
+        if (results) {
+          results.forEach(
+            order => (order["createdAt"] = dateReformat(order["createdAt"]))
+          );
+          this.setState(() => ({ orders: results }));
         }
-
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 
-  goToOrder = (name) => {
+  goToOrder = name => {
     const { navigate } = this.props.navigation;
-    return navigate('SingleOrder', { name })
-  }
+    return navigate("SingleOrder", { name });
+  };
 
-
-
-  render () {
-    const { orders } = this.state
-    return orders.length ? (
+  render() {
+    const { orders } = this.state;
+    return (
       <ScrollView>
-      {orders.map((order, i) => {
-        return (
-          <Container key={order.id}>
-        {/* <Header /> */}
-        <Content>
-          <Card>
-            <CardItem>
-              <Icon active name="logo-googleplus" />
-              <Text>Google Plus</Text>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-             </CardItem>
-           </Card>
-        </Content>
-      </Container>
-          // <View style={styles.container} key={order.id}>
-          //   <TouchableOpacity onPress={() => this.goToOrder(i)}>
-          //   <View style={styles.card}>
-          //     <Text style={styles.title}>
-          //     {order.createdAt}
-          //     </Text>
-          //     <Text style={{fontSize: 25}}>
-          //       {`$${order.subtotal}`}
-          //     </Text>
-          //   </View>
-          //   </TouchableOpacity>
-          // </View>
-        )
-      })}
-    </ScrollView>
-    )
-    :
-    (
-      <View style={styles.container}>
-        <Text style={{fontSize: 25}}>
-            Thank you for signing for Smart Mart!
-            Say goodbye to waiting in line!
-        </Text>
-      </View>
-    )
+        <Container>
+          <Content>
+            {orders.map((order, i) => {
+              return (
+                <TouchableOpacity
+                  key={order.id}
+                  onPress={() => this.goToOrder(i)}
+                >
+                  <Card>
+                    <View style={styles.card}>
+                      <Text style={styles.title}>{order.createdAt}</Text>
+                      <Text style={styles.text}>{`$${order.subtotal}`}</Text>
+                    </View>
+                  </Card>
+                </TouchableOpacity>
+              );
+            })}
+          </Content>
+        </Container>
+      </ScrollView>
+    );
   }
 }
-
-
-// export default class CardListExample extends Component {
-//   render() {
-//     return (
-
-//     )
-//   }
-// }
-
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: white,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 375,
-    borderBottomWidth: 0.5
+    backgroundColor: blue,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%"
   },
   card: {
     flex: 1,
     backgroundColor: white,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     height: 150,
-    width: 375,
-    borderBottomWidth: 0.5
+    width: 360
   },
   title: {
     fontSize: 30,
-    fontWeight: 'bold'
+    fontWeight: "bold",
+    color: gray
   },
+  text: {
+    marginTop: 10,
+    color: gray,
+    fontSize: 20
+  }
 });
