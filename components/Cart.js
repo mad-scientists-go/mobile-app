@@ -19,14 +19,14 @@ export default class Cart extends Component {
     };
   }
 
-  // componentWillMount() {
-  //   axios
-  //     .get("https://smart-mart-server.herokuapp.com/api/orders/cart/" + user.id)
-  //     .then(data => {
-  //       if (data.data) this.setState({ cart: data.data.lineItems, order: data.data })
-  //     })
-  //     .catch(err => console.log(err))
-  // }
+  componentWillMount() {
+    // axios
+    //   .get("https://smart-mart-server.herokuapp.com/api/orders/cart/" + user.id)
+    //   .then(data => {
+    //     if (data.data) this.setState({ cart: data.data.lineItems, order: data.data })
+    //   })
+    //   .catch(err => console.log(err))
+  }
   componentDidMount() {
     AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
     .then(data => {
@@ -36,7 +36,7 @@ export default class Cart extends Component {
       .then(data => {
         if(data.data) {
           this.setState({ cart: data.data.lineItems })
-          socket.on("mobile-cart-update", function(data) {
+          socket.on("mobile-cart-update", (data) => {
             console.log("smobile socket working");
             this.setState({ cart: data.lineItems });
           });
