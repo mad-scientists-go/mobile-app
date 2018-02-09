@@ -75,7 +75,7 @@ export default class Cart extends Component {
     return (
       <Container>
         <View
-          style={this.state.order ? styles.cartStatusIn : styles.cartStatusOut}
+          style={this.state.order.id ? styles.cartStatusIn : styles.cartStatusOut}
         >
           <Text style={styles.statusText}>
             {this.state.order ? "In Store" : "Out of Store"}
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   cartStatusOut: {
     width: "50%",
-    height: "30%",
+    height: "10%",
     alignSelf: "center",
     justifyContent: "center",
     marginTop: 20,

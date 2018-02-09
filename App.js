@@ -48,23 +48,22 @@ const Tabs = TabNavigator({
       tabBarIcon: ({ tintColor }) => <FontAwesome name='shopping-cart' size={30} color={tintColor} />
     }
   },
-  {
-    tabBarOptions: {
-      activeTintColor: Platform.OS === "ios" ? blue : white,
-      style: {
-        height: 56,
-        backgroundColor: Platform.OS === "ios" ? white : blue,
-        shadowColor: "rgba(0, 0, 0, 0.24)",
-        shadowOffset: {
-          width: 0,
-          height: 3
-        },
-        shadowRadius: 6,
-        shadowOpacity: 1
-      }
+},{
+  tabBarOptions: {
+    activeTintColor: Platform.OS === "ios" ? blue : white,
+    style: {
+      height: 56,
+      backgroundColor: Platform.OS === "ios" ? white : blue,
+      shadowColor: "rgba(0, 0, 0, 0.24)",
+      shadowOffset: {
+        width: 0,
+        height: 3
+      },
+      shadowRadius: 6,
+      shadowOpacity: 1
     }
   }
-);
+});
 
 const AuthTabs = TabNavigator(
   {
