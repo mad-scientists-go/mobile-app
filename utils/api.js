@@ -28,7 +28,7 @@ export function login(user) {
 }
 
 function formatOrderResults(results) {
-  return results !== null ? setDummyOrders() : JSON.parse(results);
+  return results === null ? setDummyOrders() : JSON.parse(results);
 }
 
 function setDummyOrders() {
