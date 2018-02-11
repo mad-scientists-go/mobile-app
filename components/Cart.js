@@ -35,14 +35,37 @@ export default class Cart extends Component {
       text: "hello world",
       cart: [],
       order: {},
-      user: {}
+      user: {},
+      inStore: false
     };
+    // this.tempusr = {}
   }
 
   componentWillMount() {
+    
+  }
+  componentDidMount() {
+    let tempusr = null
     AsyncStorage.getItem(ORDER_HISTORY_STORAGE_KEY)
       .then(data => {
-        tempusr = JSON.parse(data);
+        tempusr = JSON.parse(data)
+        socket.on(`mobile-cart-update`, data => { //-${tempusr.id}
+          console.log("new copy of cart incoming..");
+          let cart = data.data.lineItems;
+          this.setState({ cart, order: data.data });
+        })
+    
+        //when this user walks in grab newly created order from event, cart is empty.
+        socket.on(`new-instore-user-${tempusr.id}`, data => {
+          console.log("user walked into store, receiving new cart?")
+          this.setState({ order: data.order, user: data.user, inStore: true });
+        })
+    
+        socket.on(`walkout-instore-user-${tempusr.id}`, data => {
+          console.log("user walked into store, receiving new cart?")
+          this.setState({ order: {}, cart: [], user: data.user, inStore: false });
+        })
+
         return axios.get(
           "https://smart-mart-server.herokuapp.com/api/orders/cart/" +
             tempusr.id
@@ -50,35 +73,30 @@ export default class Cart extends Component {
       })
       .then(data => {
         if (data.data) {
-          this.setState({ cart: data.data.lineItems, user: tempusr, order: data.data });
+          let isIn = data.data.id ? true : false
+          this.setState({ cart: data.data.lineItems, user: tempusr, order: data.data, inStore: isIn });
         }
       })
       .catch(err => console.log(err));
   }
-  componentDidMount() {
-    socket.on("mobile-cart-update", data => {
-      console.log("new copy of cart incoming..");
-      let cart = data.data.lineItems;
-      this.setState({ cart, order: data.data });
-    });
-
-    //when this user walks in grab newly created order from event, cart is empty.
-    socket.on(`new-instore-user-${this.state.user.id}`, data => {
-      console.log("user walked into store, receiving new cart?");
-      this.setState({ order: data.order, user: data.user });
-    });
-  }
 
   render() {
     let list = this.state.cart;
-    let tax = this.state.order.subTotal * 0.07 || 0
+    let subTotal = 0
+    let tax = 0
+    let total = 0
+    if(this.state.cart.length > 0) {
+      subTotal = this.state.order.subtotal
+      tax = subTotal * 0.07
+      total = subTotal + tax
+    }
     return (
       <Container>
         <View
-          style={this.state.order.id ? styles.cartStatusIn : styles.cartStatusOut}
+          style={this.state.inStore ? styles.cartStatusIn : styles.cartStatusOut}
         >
           <Text style={styles.statusText}>
-            {this.state.order ? "In Store" : "Out of Store"}
+            {this.state.inStore ? "In Store" : "Out of Store"}
           </Text>
         </View>
         <Content>
@@ -100,9 +118,9 @@ export default class Cart extends Component {
           </List>
         </Content>
         <Footer style={styles.footer}>
-          <Text style={{fontSize: 20}}>Subtotal: {this.state.order.subTotal || 0}</Text>
-          <Text style={{fontSize: 20}}>Tax: {tax}</Text>
-          <Text style={{fontSize: 30}}>Total: {(this.state.order.subTotal || 0) * tax}</Text>
+          <Text style={{fontSize: 20}}>Subtotal: {subTotal.toFixed(2)}</Text>
+          <Text style={{fontSize: 20}}>Tax: {tax.toFixed(2)}</Text>
+          <Text style={{fontSize: 30}}>Total: {total.toFixed(2)}</Text>
         </Footer>
       </Container>
     );
