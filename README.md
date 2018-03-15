@@ -1,4 +1,4 @@
-mobile-flashcards is a mobile app that allows you to create and study virtual decks of flashcards.
+This is the mobile companion app for smart mart
 
 ## Requirements
 
