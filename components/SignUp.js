@@ -62,48 +62,20 @@ export default class SignUp extends React.Component {
   }
 
   handleSignUp() {
-<<<<<<< HEAD
-    let subjectId = createId(16);
-    const { first, last, email, password, cardNum } = this.state;
-    const photos = this.state.photos.map(pic => pic.base64);
-||||||| merged common ancestors
-    let subjectId = createId(16)
-    const { first, last, email, password, cardNum } = this.state
-    const photos = this.state.photos.map(pic => pic.base64)
-=======
     let subject_id = createId(16)
     const { first, last, email, password, card_num } = this.state
     const photos = this.state.photos.map(pic => pic.base64)
->>>>>>> a4a3ab4b6923b4feb3bb9ea62b4fd79a36f6838c
     const user = {
       first,
       last,
       email,
       password,
-<<<<<<< HEAD
-      cardNum,
-      subjectId
-    };
-||||||| merged common ancestors
-      cardNum,
-      subjectId
-    }
-=======
       card_num,
       subject_id
     }
->>>>>>> a4a3ab4b6923b4feb3bb9ea62b4fd79a36f6838c
     const kairoParams = {
-<<<<<<< HEAD
-      subject_id: subjectId,
-      gallery_name: "go-gallery-5",
-||||||| merged common ancestors
-      subject_id: subjectId,
-      gallery_name: 'go-gallery-5',
-=======
       subject_id,
       gallery_name: 'go-gallery-5',
->>>>>>> a4a3ab4b6923b4feb3bb9ea62b4fd79a36f6838c
       image: photos[0]
     };
     axios({
@@ -126,7 +98,6 @@ export default class SignUp extends React.Component {
       .then(res => res.data)
       .then(res => {
         console.log("got new user", res);
-
         if (res.email) {
           alert(`Welcome ${res.first} ${res.last}`);
           login(res)

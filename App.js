@@ -18,44 +18,52 @@ import { Constants } from "expo";
 import { setLocalNotification } from "./utils/helpers";
 import { blue, white, gray } from "./utils/colors";
 
-const Tabs = TabNavigator(
-  {
-    OrderList: {
-      screen: OrderList,
-      navigationOptions: {
-        tabBarLabel: "My Reciepts",
-        tabBarIcon: ({ tintColor }) => (
-          <MaterialCommunityIcons name="cards" size={35} color={tintColor} />
-        )
-      }
-    },
-    Cart: {
-      screen: Cart,
-      navigationOptions: {
-        tabBarLabel: "My Cart",
-        tabBarIcon: ({ tintColor }) => (
-          <FontAwesome name="shopping-cart" size={30} color={tintColor} />
-        )
-      }
+
+function UdaciStatusBar ({ backgroundColor, ...props }) {
+  return (
+    <View style={{backgroundColor, height: Constants.statusBarHeight}}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props}/>
+    </View>
+  )
+}
+
+const Tabs = TabNavigator({
+  OrderList: {
+    screen: OrderList,
+    navigationOptions: {
+      headerStyle:{
+        backgroundColor: blue
+      },
+      tabBarLabel: 'My Receipts',
+      tabBarIcon: ({ tintColor }) => <MaterialCommunityIcons name='cards' size={35} color={tintColor} />
     }
   },
-  {
-    tabBarOptions: {
-      activeTintColor: Platform.OS === "ios" ? blue : white,
-      style: {
-        height: 56,
-        backgroundColor: Platform.OS === "ios" ? white : blue,
-        shadowColor: "rgba(0, 0, 0, 0.24)",
-        shadowOffset: {
-          width: 0,
-          height: 3
-        },
-        shadowRadius: 6,
-        shadowOpacity: 1
-      }
+  Cart: {
+    screen: Cart,
+    navigationOptions: {
+      headerStyle:{
+        backgroundColor: blue
+      },
+      tabBarLabel: 'My Cart',
+      tabBarIcon: ({ tintColor }) => <FontAwesome name='shopping-cart' size={30} color={tintColor} />
+    }
+  },
+},{
+  tabBarOptions: {
+    activeTintColor: Platform.OS === "ios" ? blue : white,
+    style: {
+      height: 56,
+      backgroundColor: Platform.OS === "ios" ? white : blue,
+      shadowColor: "rgba(0, 0, 0, 0.24)",
+      shadowOffset: {
+        width: 0,
+        height: 3
+      },
+      shadowRadius: 6,
+      shadowOpacity: 1
     }
   }
-);
+});
 
 const AuthTabs = TabNavigator(
   {

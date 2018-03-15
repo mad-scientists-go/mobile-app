@@ -18,9 +18,8 @@ export default class componentName extends Component {
         this.state = {
           hasCameraPermission: null,
           type: Camera.Constants.Type.front,
-          photos: []
         };
-        this.cnt = 0
+        
       }
 
 
@@ -29,22 +28,24 @@ export default class componentName extends Component {
         //take 3 shots
         //setstate
         //close modal
+        let cnt = 0
+        let photos = []
         const snap = () => {
             // console.log(this.camera)
             return this.camera.takePictureAsync({ base64: true })
             .then(pic => {
-                if(this.cnt > 2) {
+                if(cnt > 2) {
                     clearInterval(interval)
-                    this.cnt = 0
-                    this.props.grabPhotos(this.state.photos)
+                    cnt = 0
+                    this.props.grabPhotos(photos)
                     this.props.toggleCamera()
                 }
                 // console.log('working', pic)
-                this.setState({ photos: [...this.state.photos, pic]})
-                this.cnt++
+                photos = [...photos, pic]
+                cnt++
             })
         }
-        let interval = setInterval(snap, 600)
+        let interval = setInterval(snap, 300)
 
     }
     render() {
