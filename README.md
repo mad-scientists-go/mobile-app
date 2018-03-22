@@ -1,4 +1,6 @@
-This is the mobile companion app for smart mart
+# Smart Mart Mobile Companion App
+
+This is the mobile companion app for smart mart. It allows user's to create accounts, see live cart updates while shopping and keep track of past reciepts. For more information about smart mart see the [shopping go readme](https://github.com/mad-scientists-go/shopping-go).
 
 ## Requirements
 
